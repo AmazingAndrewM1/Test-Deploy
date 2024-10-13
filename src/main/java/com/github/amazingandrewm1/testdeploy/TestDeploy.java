@@ -6,6 +6,7 @@ import java.awt.BorderLayout;
 
 public class TestDeploy extends JFrame{
     public TestDeploy() {
+        setLayout(new BorderLayout());
         add(new AnimatedPanel(), BorderLayout.CENTER);
     }
 
