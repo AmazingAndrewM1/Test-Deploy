@@ -1,45 +1,44 @@
 package com.github.amazingandrewm1.testdeploy;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 public class TestDeploy extends JFrame {
 
-    private Timer timer;
-    private int x, y, xDelta = 2, yDelta = 2;
-    private JButton startButton, stopButton;
-    private AnimatedPanel animatedPanel;
+    private int mouseX = 0;
+    private int mouseY = 0;
+    private final AnimatedPanel animatedPanel;
 
     public TestDeploy() {
-        x = y = 100;
-        timer = new Timer(10, e -> {
-            x += xDelta;
-            y += yDelta;
-
-            if (x + "Hello jDeploy".length() * 7 >= animatedPanel.getWidth() || x < 0) xDelta *= -1;
-            if (y + 15 >= animatedPanel.getHeight() || y < 0) yDelta *= -1;
-
-            animatedPanel.repaint();
-        });
-
-        startButton = new JButton("Start");
-        startButton.addActionListener(e -> timer.start());
-
-        stopButton = new JButton("Stop");
-        stopButton.addActionListener(e -> timer.stop());
-
         animatedPanel = new AnimatedPanel();
+        animatedPanel.addMouseListener(new MouseListener(){
+            @Override
+            public void mouseClicked(MouseEvent me){
+                mouseX = me.getX();
+                mouseY = me.getY();
+                animatedPanel.repaint();
+            }
+
+            @Override public void mousePressed(MouseEvent me){}
+            @Override public void mouseReleased(MouseEvent me){}
+            @Override public void mouseEntered(MouseEvent me){}
+            @Override public void mouseExited(MouseEvent me){}
+        });
 
         setLayout(new BorderLayout());
         add(animatedPanel, BorderLayout.CENTER);
-        add(startButton, BorderLayout.NORTH);
-        add(stopButton, BorderLayout.SOUTH);
+        add(new JButton("Start"), BorderLayout.NORTH);
+        add(new JButton("Stop"), BorderLayout.SOUTH);
     }
 
     class AnimatedPanel extends JPanel {
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
-            g.drawString("Hello jDeploy 8", x, y);
+
+            String text = "Mouse Coordinates: (" + mouseX + ", " + mouseY + ")";
+            g.drawString(text, 100, 100);
         }
     }
 
